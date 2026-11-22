@@ -1,0 +1,13 @@
+name = "wanderer-payment-api"
+main = "src.js"
+compatibility_date = "2026-11-01"
+
+[vars]
+# เปลี่ยนเป็น URL Cloudflare Pages ของเว็บชำระเงินใหม่เท่านั้น ไม่มี slash ท้ายสุด
+ALLOWED_ORIGIN = "https://YOUR-PAYMENT-PROJECT.pages.dev"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "wanderer-payment-db"
+database_id = "ae873fac-1d39-42d9-9c4a-7f6d0298e7ca"
+migrations_dir = "migrations"
