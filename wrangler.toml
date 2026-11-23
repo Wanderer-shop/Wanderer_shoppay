@@ -9,5 +9,5 @@ ALLOWED_ORIGIN = "https://YOUR-PAYMENT-PROJECT.pages.dev"
 [[d1_databases]]
 binding = "DB"
 database_name = "wanderer-payment-db"
-database_id = "ae873fac-1d39-42d9-9c4a-7f6d0298e7ca"
+database_id = "REPLACE_WITH_NEW_D1_DATABASE_ID"
 migrations_dir = "migrations"

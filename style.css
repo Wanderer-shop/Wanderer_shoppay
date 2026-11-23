@@ -69,3 +69,12 @@
 }
 @media(max-width:340px){.dock-button{font-size:8px;min-height:57px}.floating-dock{padding:7px 5px;gap:3px}}
 @media(prefers-reduced-motion:reduce){.floaty{animation:none!important}.dock-button{transition:none!important}}
+
+/* Payment enhancements: configurable larger logo, PromptPay and copyable note */
+:root{--logo-size:150px}
+.brand-icon,.brand-image{width:clamp(70px,var(--logo-size),240px);height:clamp(70px,var(--logo-size),240px);font-size:clamp(38px,calc(var(--logo-size) * .54),115px);flex-shrink:0}
+.promptpay-section{margin-top:20px;padding:17px 18px;border:1px solid #c2cbf5;border-radius:19px;background:linear-gradient(115deg,#f0eaffee,#e0f5ffee);box-shadow:0 7px 24px #b9a4da2b}
+.promptpay-section .data-row{margin-bottom:13px}.promptpay-section .wallet-head{color:#5647a4}.promptpay-section .wallet-copy{width:100%;max-width:310px}
+.action:disabled{opacity:.53;cursor:not-allowed}
+.note-copy{margin-top:12px;max-width:100%}
+@media(max-width:480px){.brand-icon,.brand-image{width:min(var(--logo-size),48vw);height:min(var(--logo-size),48vw);font-size:clamp(38px,calc(var(--logo-size) * .49),105px)}.promptpay-section{padding:14px}.note-copy{width:100%}}
