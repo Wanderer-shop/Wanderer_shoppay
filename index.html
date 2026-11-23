@@ -7,7 +7,13 @@
   <div class="notice"><span>⚠️</span><div><b>โปรดอ่านก่อนชำระเงิน</b><p id="note"></p></div></div>
   <footer>✩⡱ <span id="footerShop">Wanderer Shop</span> · Payment Page</footer>
 </div></div>
-<nav class="floating-dock" id="dock" aria-label="เมนูเว็บไซต์"></nav><div id="toast" role="status" class="toast hidden"></div>
+<nav class="floating-dock" id="dock" aria-label="เมนูเว็บไซต์" style="--dock-count:5">
+  <a class="dock-button" href="#" data-pending-link><span class="dock-icon">🛍️</span><span class="dock-label">เว็บสินค้า</span></a>
+  <a class="dock-button" href="#" data-pending-link><span class="dock-icon">☆</span><span class="dock-label">รีวิว</span></a>
+  <a class="dock-button" href="#" data-pending-link><span class="dock-icon">💬</span><span class="dock-label">ติดต่อ</span></a>
+  <a class="dock-button" href="#" data-pending-link><span class="dock-icon">🖥️</span><span class="dock-label">ตัวอย่างเว็บ</span></a>
+  <button class="dock-button admin-button" type="button" id="dockAdmin"><span class="dock-icon">⚙</span><span class="dock-label">แอดมิน</span></button>
+</nav><div id="toast" role="status" class="toast hidden"></div>
 <div class="dialog-backdrop hidden" id="qrDialog" role="dialog" aria-modal="true" aria-label="ขยาย QR"><div class="dialog"><div class="dialog-head"><b>✧ QR ชำระเงิน</b><button id="closeQR" class="action">✕ ปิด</button></div><div id="largeQR" class="qr-frame large"></div></div></div>
 <div class="dialog-backdrop hidden" id="loginDialog" role="dialog" aria-modal="true" aria-label="เข้าสู่ระบบแอดมิน"><div class="dialog"><div class="dialog-head"><b>⚙ แอดมิน</b><button id="closeLogin" class="action">✕ ปิด</button></div><p>กรอกรหัสแอดมินเพื่อแก้ไขข้อมูลกลางของร้าน</p><form id="loginForm"><input id="loginPassword" type="password" autocomplete="current-password" placeholder="รหัสผ่านแอดมิน" required><button class="action primary" type="submit">เข้าสู่ระบบ</button></form><p class="login-help" id="loginError"></p></div></div>
 <script src="config.js"></script><script src="main.js"></script></body></html>
