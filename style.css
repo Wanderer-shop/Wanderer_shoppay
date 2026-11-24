@@ -78,3 +78,29 @@
 .action:disabled{opacity:.53;cursor:not-allowed}
 .note-copy{margin-top:12px;max-width:100%}
 @media(max-width:480px){.brand-icon,.brand-image{width:min(var(--logo-size),48vw);height:min(var(--logo-size),48vw);font-size:clamp(38px,calc(var(--logo-size) * .49),105px)}.promptpay-section{padding:14px}.note-copy{width:100%}}
+
+/* Nov 24: framed bank details; distinct warning vs copyable slip note */
+.bank-details-panel{padding:17px;border:1px solid #c9cbf7;border-radius:20px;background:linear-gradient(120deg,#f7f0ffdd,#eaf5ffef);box-shadow:0 7px 24px #b9a4da25}
+.bank-details-panel .data-row:last-of-type{margin-bottom:0}
+.bank-details-panel .buttons{margin-top:15px}
+.bank-details-panel .buttons .action{min-width:185px}
+.notice-body{min-width:0;flex:1}
+.slip-note-box{margin:14px auto 0;max-width:960px;border:2px solid #fff;border-radius:25px;padding:20px 24px;background:linear-gradient(115deg,#f7f0ffef,#e4f4ffef);box-shadow:0 8px 24px #a89ac54d}
+.slip-note-heading{display:flex;align-items:center;gap:9px;font-size:17px;color:#55448d}
+.slip-note-heading span{font-size:23px;color:var(--accent)}
+.slip-note-text{margin:13px 0;padding:15px 17px;min-height:60px;border:1px solid #e0d7ff;border-radius:16px;background:#fff9;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}
+.slip-note-box .note-copy{max-width:100%;min-width:205px}
+@media(max-width:480px){.bank-details-panel{padding:12px}.bank-details-panel .buttons .action{width:100%}.slip-note-box{padding:16px}.slip-note-box .note-copy{width:100%}}
+
+/* 2026-11-24 layout: matching bank / PromptPay cards, copy-note inside top notice */
+.bank-details-panel{margin-top:12px;margin-bottom:18px;padding:17px 18px;border:1px solid #c2cbf5;border-radius:19px;background:linear-gradient(115deg,#f0eaffee,#e0f5ffee);box-shadow:0 7px 24px #b9a4da2b}
+.bank-details-panel .wallet-head{color:#5647a4;line-height:1.45;overflow-wrap:anywhere}
+.bank-details-panel .data-row{margin-bottom:11px}
+.bank-details-panel .bank-copy{width:100%;max-width:310px;min-height:45px}
+.notice{max-width:960px;margin:20px auto 22px;align-items:flex-start}
+.notice-body{width:100%;min-width:0;flex:1}
+.notice-note{margin-top:16px;padding:15px;border-radius:18px;background:linear-gradient(110deg,#f4edff,#e5f5ff);border:1px solid #d6cbfa}
+.notice-note .slip-note-heading{font-size:15px}
+.notice-note .slip-note-text{margin:10px 0 12px;padding:12px 14px;min-height:45px}
+.notice-note .note-copy{width:auto;max-width:100%;min-width:195px}
+@media(max-width:480px){.bank-details-panel{padding:14px}.bank-details-panel .bank-copy,.notice-note .note-copy{width:100%}.notice-note{padding:12px}}
