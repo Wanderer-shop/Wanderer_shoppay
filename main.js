@@ -11,7 +11,7 @@ function showQR(large=false){const node=large?$('largeQR'):$('qrFrame');node.rep
 function render(payload){site=payload;latestRevision=payload.revision;const c=payload.config;
   document.documentElement.style.setProperty('--accent',c.accent);document.documentElement.style.setProperty('--secondary',c.secondary);document.documentElement.style.setProperty('--bg',c.backgroundColor);
   $('shopName').textContent=c.shopName;$('footerShop').textContent=c.shopName;$('eyebrow').textContent=c.eyebrow;$('pageTitle').textContent=c.title;$('subtitle').textContent=c.subtitle;
-  $('bank').textContent=c.bank;$('bankName').textContent=c.bankName;$('bankNumber').textContent=c.bankNumber;const pp=String(c.promptPayNumber||'').trim();$('promptPayNumber').textContent=pp||'ยังไม่ได้ตั้งค่า';$('copyPromptPay').disabled=!pp;document.documentElement.style.setProperty('--logo-size',`${Math.max(70,Math.min(240,Number(c.logoSize)||150))}px`);const wallet=String(c.walletNumber||'').trim();$('walletNumber').textContent=wallet||'ยังไม่ได้ตั้งค่า';$('copyWallet').disabled=!wallet;$('note').textContent=c.note;
+  $('bank').textContent=c.bank;$('bankName').textContent=c.bankName;$('bankNumber').textContent=c.bankNumber;const pp=String(c.promptPayNumber||'').trim();$('promptPayNumber').textContent=pp||'ยังไม่ได้ตั้งค่า';$('copyPromptPay').disabled=!pp;document.documentElement.style.setProperty('--logo-size',`${Math.max(70,Math.min(240,Number(c.logoSize)||150))}px`);const wallet=String(c.walletNumber||'').trim();$('walletNumber').textContent=wallet||'ยังไม่ได้ตั้งค่า';$('copyWallet').disabled=!wallet;$('warningText').textContent=c.warningText??c.note??'';const slip=String(c.slipNote||'').trim();$('slipNote').textContent=slip||'ยังไม่ได้ตั้งค่าโน้ตสลิป';$('copyNote').disabled=!slip;
   $('sky').style.background=c.backgroundMode==='color'?c.backgroundColor:c.backgroundMode==='image'&&payload.images.background?`linear-gradient(#efe9ff66,#d0e5ff44),url("${imgSrc('background',payload.revision)}") center/cover fixed`:`linear-gradient(135deg,#eee4ff 5%,${c.backgroundColor} 49%,#b6e5ff 100%)`;
   const logo=$('brandImage');logo.classList.toggle('hidden',!payload.images.logo);$('brandIcon').classList.toggle('hidden',!!payload.images.logo);if(payload.images.logo)logo.src=imgSrc('logo',payload.revision);
   $('floatWord').textContent=c.floatingText||'';$('floatWord').style.left=`${c.floatX}%`;$('floatWord').style.top=`${c.floatY}%`;$('floatWord').style.fontSize=`${c.floatSize}px`;$('floatWord').classList.toggle('floaty',!!c.floatAnimate);
@@ -21,8 +21,37 @@ function render(payload){site=payload;latestRevision=payload.revision;const c=pa
 }
 async function reload(silent=false){if(!API||API.includes('YOUR-PAYMENT-WORKER')){if(!silent)notice('ต้องตั้งค่า Worker URL ใน config.js ก่อน');return}try{const resp=await fetch(`${API}/api/public`,{cache:'no-store'});if(!resp.ok)throw Error('API '+resp.status);const json=await resp.json();if(!site||json.revision!==latestRevision)render(json)}catch(e){if(!silent)notice('ไม่สามารถโหลดข้อมูลร้านได้ กรุณาตรวจสอบ API')}}
 async function copy(text){try{await navigator.clipboard.writeText(text);notice('คัดลอกแล้ว ✓')}catch{const el=document.createElement('textarea');el.value=text;document.body.append(el);el.select();const done=document.execCommand('copy');el.remove();notice(done?'คัดลอกแล้ว ✓':'เบราว์เซอร์ไม่อนุญาตให้คัดลอก')}}
-$('copyNote').onclick=()=>{const value=site?.config?.note||$('note').textContent;if(value.trim())copy(value);else notice('ยังไม่ได้ตั้งค่าโน้ตสลิป')};$('copyPromptPay').onclick=()=>{const value=site?.config?.promptPayNumber||'';if(value.trim())copy(value);else notice('ยังไม่ได้ตั้งค่าพร้อมเพย์')};$('copyNumber').onclick=()=>copy($('bankNumber').textContent);$('copyName').onclick=()=>copy($('bankName').textContent);$('copyWallet').onclick=()=>{if(site?.config?.walletNumber?.trim())copy(site.config.walletNumber.trim());else notice('ยังไม่ได้ตั้งค่าเบอร์วอลเล็ต')};
+$('copyNote').onclick=()=>{const value=String(site?.config?.slipNote||'').trim();if(value)copy(value);else notice('ยังไม่ได้ตั้งค่าโน้ตสลิป')};$('copyPromptPay').onclick=()=>{const value=site?.config?.promptPayNumber||'';if(value.trim())copy(value);else notice('ยังไม่ได้ตั้งค่าพร้อมเพย์')};$('copyNumber').onclick=()=>copy($('bankNumber').textContent);$('copyWallet').onclick=()=>{if(site?.config?.walletNumber?.trim())copy(site.config.walletNumber.trim());else notice('ยังไม่ได้ตั้งค่าเบอร์วอลเล็ต')};
 $('expandQR').onclick=()=>{showQR(true);$('qrDialog').classList.remove('hidden')};$('closeQR').onclick=()=>$('qrDialog').classList.add('hidden');$('closeLogin').onclick=()=>$('loginDialog').classList.add('hidden');
-$('loginForm').onsubmit=async e=>{e.preventDefault();$('loginError').textContent='';try{const resp=await fetch(`${API}/api/login`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:$('loginPassword').value})});const v=await resp.json();if(!resp.ok)throw Error(v.error||'Login error');sessionStorage.setItem('wanderer_pay_token',v.token);window.location.href='admin.html'}catch(err){$('loginError').textContent=err.message}};
+$('loginForm').onsubmit=async e=>{
+  e.preventDefault();
+  const msg=$('loginError');const submit=$('loginForm').querySelector('button[type=submit]');
+  msg.textContent='';
+  if(!API || API.includes('YOUR-PAYMENT-WORKER')){
+    msg.textContent='ยังไม่ได้ตั้งค่า URL ของ Worker ใน config.js';return;
+  }
+  submit.disabled=true;submit.textContent='กำลังตรวจสอบ...';
+  try{
+    const resp=await fetch(`${API}/api/login`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({password:$('loginPassword').value})
+    });
+    const raw=await resp.text();let v;
+    try{v=JSON.parse(raw)}catch{throw Error(`Worker ตอบกลับไม่ใช่ JSON (HTTP ${resp.status})`)}
+    if(!resp.ok){
+      const reason=v.error||`HTTP ${resp.status}`;
+      if(resp.status===401)throw Error('รหัสผ่านไม่ถูกต้อง กรุณาตรวจรหัสที่ตั้งใน Worker');
+      if(resp.status===403)throw Error('โดเมนเว็บยังไม่อยู่ใน ALLOWED_ORIGIN ของ Worker');
+      if(resp.status===429)throw Error('เข้าสู่ระบบผิดหลายครั้ง กรุณาลองใหม่หลัง 15 นาที');
+      if(resp.status===503)throw Error('Worker ยังตั้ง ADMIN_PASSWORD / SESSION_SECRET ไม่ครบ');
+      throw Error(reason);
+    }
+    if(typeof v.token!=='string'||!v.token)throw Error('Worker ไม่ส่งโทเคนแอดมินกลับมา');
+    sessionStorage.setItem('wanderer_pay_token',v.token);
+    window.location.assign(new URL('admin.html',window.location.href).href);
+  }catch(err){
+    msg.textContent=err instanceof TypeError?'เชื่อม Worker ไม่สำเร็จ: ตรวจ config.js, ALLOWED_ORIGIN และอินเทอร์เน็ต':(err.message||'เข้าสู่ระบบไม่สำเร็จ');
+  }finally{submit.disabled=false;submit.textContent='เข้าสู่ระบบ'}
+};
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)reload(true)});setInterval(()=>{if(!document.hidden)reload(true)},60000);reload();
 })();
