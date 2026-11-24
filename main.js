@@ -1,7 +1,7 @@
 (() => {
 'use strict';
 const API=(window.PAYMENT_API||'').replace(/\/$/,'');const $=id=>document.getElementById(id);let site=null,latestRevision=-1;let t;
-function openLogin(){$('loginDialog').classList.remove('hidden');$('loginPassword').focus()}
+function openLogin(){$('loginDialog').classList.remove('hidden');$('loginError').textContent='';$('loginPassword').focus()}
 // The floating navigation is visible before the API responds; its admin button always works.
 $('dock').addEventListener('click',e=>{const button=e.target.closest('[data-pending-link],#dockAdmin');if(button?.hasAttribute('data-pending-link')){e.preventDefault();notice('กำลังโหลดลิงก์จากระบบ กรุณาลองอีกครั้ง')}else if(button?.id==='dockAdmin')openLogin()});
 function notice(message){const el=$('toast');el.textContent=message;el.classList.remove('hidden');clearTimeout(t);t=setTimeout(()=>el.classList.add('hidden'),3000)}
